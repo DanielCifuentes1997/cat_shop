@@ -3,6 +3,7 @@ import type { UserRepository } from '../../domain/interfaces/user.repository';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { User } from '../../domain/entities/user.entity';
 import { randomUUID, randomBytes } from 'crypto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CreateUserUseCase {
@@ -12,9 +13,12 @@ export class CreateUserUseCase {
   ) {}
 
   async execute(dto: CreateUserDto): Promise<User> {
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+
     const newUser = new User(
       randomUUID(),
       dto.email,
+      hashedPassword,
       this.generateReferralCode(),
       dto.referredBy || null,
       new Date(),

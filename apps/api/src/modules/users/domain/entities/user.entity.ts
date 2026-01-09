@@ -1,9 +1,10 @@
 export class User {
   constructor(
-    public id: string,
-    public email: string,
-    public referralCode: string,
-    public referredBy: string | null,
-    public createdAt: Date,
+    public readonly id: string,
+    public readonly email: string,
+    public readonly password: string,
+    public readonly referralCode: string,
+    public readonly referredBy: string | null,
+    public readonly createdAt: Date,
   ) {}
 }

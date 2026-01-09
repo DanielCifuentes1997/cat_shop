@@ -12,6 +12,7 @@ export class PrismaUserRepository implements UserRepository {
       data: {
         id: user.id,
         email: user.email,
+        password: user.password,
         referralCode: user.referralCode,
         referredBy: user.referredBy,
         createdAt: user.createdAt,
@@ -30,6 +31,7 @@ export class PrismaUserRepository implements UserRepository {
     return new User(
       savedUser.id,
       savedUser.email,
+      savedUser.password,
       savedUser.referralCode,
       savedUser.referredBy,
       savedUser.createdAt,
@@ -44,6 +46,7 @@ export class PrismaUserRepository implements UserRepository {
     return new User(
       savedUser.id,
       savedUser.email,
+      savedUser.password,
       savedUser.referralCode,
       savedUser.referredBy,
       savedUser.createdAt,
