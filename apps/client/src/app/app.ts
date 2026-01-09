@@ -24,12 +24,13 @@ export class AppComponent {
 
   testRegister() {
     const randomEmail = `test${Math.floor(Math.random() * 1000)}@gatos.com`;
+    const password = 'passwordSeguro123'; //Prueba
     
-    this.apiService.registerUser(randomEmail).subscribe({
+    this.apiService.registerUser(randomEmail, password).subscribe({
       next: (data) => {
         console.log('Éxito:', data);
         this.response = data;
-        alert('¡Usuario creado en BD!');
+        alert('¡Usuario creado en BD con Password encriptado!');
       },
       error: (err) => {
         console.error('Error:', err);
