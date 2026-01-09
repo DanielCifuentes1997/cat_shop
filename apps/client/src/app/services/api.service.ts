@@ -11,4 +11,8 @@ export class ApiService {
   registerUser(email: string, password: string) {
     return this.http.post(`${this.apiUrl}/users`, { email, password });
   }
+
+  login(email: string, password: string) {
+    return this.http.post(`${this.apiUrl}/auth/login`, { email, password });
+  }
 }

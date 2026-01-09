@@ -8,6 +8,8 @@ export class UsersController {
 
   @Post()
   async create(@Body() dto: CreateUserDto) {
-    return this.createUserUseCase.execute(dto);
+    const user = await this.createUserUseCase.execute(dto);
+    const { password, ...result } = user;
+    return result;
   }
 }
