@@ -8,7 +8,7 @@ import { ApiService } from './services/api.service';
   imports: [CommonModule],
   template: `
     <div style="padding: 50px;">
-      <h1>Prueba de Seguridad (Auth)</h1>
+      <h1>Prueba de Seguridad (Cookies HttpOnly)</h1>
       
       <button (click)="testRegister()">1. Crear Usuario Random</button>
       
@@ -21,9 +21,11 @@ import { ApiService } from './services/api.service';
         <pre style="background: #f4f4f4; padding: 10px;">{{ response | json }}</pre>
       </div>
 
-      <div *ngIf="token">
-        <h3 style="color: green;">¡TOKEN RECIBIDO! (Llave de acceso):</h3>
-        <code style="word-break: break-all;">{{ token }}</code>
+      <div *ngIf="loginSuccess">
+        <h3 style="color: green;">¡LOGIN EXITOSO!</h3>
+        <p>El token ya NO es visible aquí.</p>
+        <p>Está guardado como Cookie HttpOnly en tu navegador.</p>
+        <p>Ahora eres inmune a ataques XSS.</p>
       </div>
     </div>
   `,
@@ -31,7 +33,7 @@ import { ApiService } from './services/api.service';
 export class AppComponent {
   private apiService = inject(ApiService);
   response: any = null;
-  token: string = '';
+  loginSuccess: boolean = false;
 
   lastEmail: string = '';
   lastPassword: string = '';
@@ -46,7 +48,7 @@ export class AppComponent {
         
         this.lastEmail = randomEmail;
         this.lastPassword = password;
-        this.token = '';
+        this.loginSuccess = false;
         
         alert(`Usuario creado: ${randomEmail}`);
       },
@@ -63,15 +65,14 @@ export class AppComponent {
     this.apiService.login(this.lastEmail, this.lastPassword).subscribe({
       next: (data: any) => {
         this.response = data;
+        this.loginSuccess = true;
         
-        if (data.accessToken) {
-          this.token = data.accessToken;
-          alert('¡LOGIN EXITOSO!');
-        }
+        alert('¡LOGIN EXITOSO! Cookie recibida.');
       },
       error: (err) => {
         console.error(err);
         this.response = err.error;
+        this.loginSuccess = false;
         alert('Error en el Login.');
       }
     });

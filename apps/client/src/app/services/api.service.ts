@@ -13,6 +13,8 @@ export class ApiService {
   }
 
   login(email: string, password: string) {
-    return this.http.post(`${this.apiUrl}/auth/login`, { email, password });
+    return this.http.post(`${this.apiUrl}/auth/login`, { email, password }, {
+      withCredentials: true
+    });
   }
 }
