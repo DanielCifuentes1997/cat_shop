@@ -8,33 +8,29 @@ import { ApiService } from './services/api.service';
   imports: [CommonModule],
   template: `
     <div style="padding: 50px;">
-      <h1>Prueba de Seguridad (Cookies HttpOnly)</h1>
+      <h1>Prueba de Seguridad (Ciclo Completo)</h1>
       
-      <button (click)="testRegister()">1. Crear Usuario Random</button>
+      <button (click)="testRegister()">1. Crear Usuario</button>
       
       <button [disabled]="!lastEmail" (click)="testLogin()" style="margin-left: 10px;">
-        2. Probar Login {{ lastEmail ? 'con ' + lastEmail : '(Crea un usuario primero)' }}
+        2. Login
       </button>
 
       <button [disabled]="!loginSuccess" (click)="testProfile()" style="margin-left: 10px;">
-        3. 🔓 Probar Acceso Seguro (Perfil)
+        3. 🔓 Datos Privados
+      </button>
+
+      <button [disabled]="!loginSuccess" (click)="testLogout()" style="margin-left: 10px; background-color: #ffcccc;">
+        4. Cerrar Sesión (Logout)
       </button>
       
       <div *ngIf="response">
-        <h3>Última Respuesta General:</h3>
+        <h3>Estado:</h3>
         <pre style="background: #f4f4f4; padding: 10px;">{{ response | json }}</pre>
       </div>
 
-      <div *ngIf="loginSuccess && !profileData">
-        <h3 style="color: green;">¡LOGIN EXITOSO!</h3>
-        <p>El token está guardado como Cookie HttpOnly.</p>
-        <p>Ahora intenta el botón 3 para ver si el backend te deja pasar.</p>
-      </div>
-
       <div *ngIf="profileData" style="border: 2px solid green; padding: 10px; margin-top: 20px;">
-        <h3 style="color: green;">✅ ¡ACCESO AUTORIZADO!</h3>
-        <p>El Backend leyó tu cookie correctamente.</p>
-        <p><strong>Datos del Perfil (Desde el Guard):</strong></p>
+        <h3 style="color: green;">✅ DENTRO DEL SISTEMA</h3>
         <pre>{{ profileData | json }}</pre>
       </div>
     </div>
@@ -56,18 +52,13 @@ export class AppComponent {
     this.apiService.registerUser(randomEmail, password).subscribe({
       next: (data) => {
         this.response = data;
-        
         this.lastEmail = randomEmail;
         this.lastPassword = password;
         this.loginSuccess = false;
         this.profileData = null;
-        
         alert(`Usuario creado: ${randomEmail}`);
       },
-      error: (err) => {
-        console.error(err);
-        alert('Error al crear usuario.');
-      }
+      error: (err) => console.error(err)
     });
   }
 
@@ -79,14 +70,12 @@ export class AppComponent {
         this.response = data;
         this.loginSuccess = true;
         this.profileData = null;
-        
-        alert('¡LOGIN EXITOSO! Cookie recibida.');
+        alert('Login OK');
       },
       error: (err) => {
-        console.error(err);
         this.response = err.error;
         this.loginSuccess = false;
-        alert('Error en el Login.');
+        alert('Error Login');
       }
     });
   }
@@ -95,12 +84,23 @@ export class AppComponent {
     this.apiService.getProfile().subscribe({
       next: (data) => {
         this.profileData = data;
-        alert('¡Acceso concedido!');
       },
       error: (err) => {
-        console.error(err);
-        alert('Acceso Denegado. La cookie falló.');
+        this.profileData = null;
+        alert('Acceso DENEGADO (Cookie inválida o expirada)');
       }
+    });
+  }
+
+  testLogout() {
+    this.apiService.logout().subscribe({
+      next: (data) => {
+        this.response = data;
+        this.loginSuccess = false;
+        this.profileData = null;
+        alert('Logout Exitoso. Cookie destruida.');
+      },
+      error: (err) => console.error(err)
     });
   }
 }

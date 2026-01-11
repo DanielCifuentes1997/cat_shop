@@ -18,6 +18,12 @@ export class ApiService {
     });
   }
 
+  logout() {
+    return this.http.post(`${this.apiUrl}/auth/logout`, {}, {
+      withCredentials: true
+    });
+  }
+
   getProfile() {
     return this.http.get(`${this.apiUrl}/auth/profile`, {
       withCredentials: true

@@ -23,6 +23,12 @@ export class AuthController {
     return response.send(user);
   }
 
+  @Post('logout')
+  logout(@Res() response: Response) {
+    response.clearCookie('Authentication');
+    return response.status(HttpStatus.OK).json({ message: 'Sesión cerrada' });
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Req() req: Request) {
