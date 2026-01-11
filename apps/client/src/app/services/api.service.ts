@@ -17,4 +17,10 @@ export class ApiService {
       withCredentials: true
     });
   }
+
+  getProfile() {
+    return this.http.get(`${this.apiUrl}/auth/profile`, {
+      withCredentials: true
+    });
+  }
 }

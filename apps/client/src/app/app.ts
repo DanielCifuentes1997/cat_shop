@@ -15,17 +15,27 @@ import { ApiService } from './services/api.service';
       <button [disabled]="!lastEmail" (click)="testLogin()" style="margin-left: 10px;">
         2. Probar Login {{ lastEmail ? 'con ' + lastEmail : '(Crea un usuario primero)' }}
       </button>
+
+      <button [disabled]="!loginSuccess" (click)="testProfile()" style="margin-left: 10px;">
+        3. 🔓 Probar Acceso Seguro (Perfil)
+      </button>
       
       <div *ngIf="response">
-        <h3>Última Respuesta del Backend:</h3>
+        <h3>Última Respuesta General:</h3>
         <pre style="background: #f4f4f4; padding: 10px;">{{ response | json }}</pre>
       </div>
 
-      <div *ngIf="loginSuccess">
+      <div *ngIf="loginSuccess && !profileData">
         <h3 style="color: green;">¡LOGIN EXITOSO!</h3>
-        <p>El token ya NO es visible aquí.</p>
-        <p>Está guardado como Cookie HttpOnly en tu navegador.</p>
-        <p>Ahora eres inmune a ataques XSS.</p>
+        <p>El token está guardado como Cookie HttpOnly.</p>
+        <p>Ahora intenta el botón 3 para ver si el backend te deja pasar.</p>
+      </div>
+
+      <div *ngIf="profileData" style="border: 2px solid green; padding: 10px; margin-top: 20px;">
+        <h3 style="color: green;">✅ ¡ACCESO AUTORIZADO!</h3>
+        <p>El Backend leyó tu cookie correctamente.</p>
+        <p><strong>Datos del Perfil (Desde el Guard):</strong></p>
+        <pre>{{ profileData | json }}</pre>
       </div>
     </div>
   `,
@@ -33,6 +43,7 @@ import { ApiService } from './services/api.service';
 export class AppComponent {
   private apiService = inject(ApiService);
   response: any = null;
+  profileData: any = null;
   loginSuccess: boolean = false;
 
   lastEmail: string = '';
@@ -49,6 +60,7 @@ export class AppComponent {
         this.lastEmail = randomEmail;
         this.lastPassword = password;
         this.loginSuccess = false;
+        this.profileData = null;
         
         alert(`Usuario creado: ${randomEmail}`);
       },
@@ -66,6 +78,7 @@ export class AppComponent {
       next: (data: any) => {
         this.response = data;
         this.loginSuccess = true;
+        this.profileData = null;
         
         alert('¡LOGIN EXITOSO! Cookie recibida.');
       },
@@ -74,6 +87,19 @@ export class AppComponent {
         this.response = err.error;
         this.loginSuccess = false;
         alert('Error en el Login.');
+      }
+    });
+  }
+
+  testProfile() {
+    this.apiService.getProfile().subscribe({
+      next: (data) => {
+        this.profileData = data;
+        alert('¡Acceso concedido!');
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Acceso Denegado. La cookie falló.');
       }
     });
   }
