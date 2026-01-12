@@ -11,6 +11,7 @@ export class PrismaUserRepository implements UserRepository {
     await this.prisma.user.create({
       data: {
         id: user.id,
+        name: user.name,
         email: user.email,
         password: user.password,
         referralCode: user.referralCode,
@@ -30,6 +31,7 @@ export class PrismaUserRepository implements UserRepository {
     if (!savedUser) return null;
     return new User(
       savedUser.id,
+      savedUser.name,
       savedUser.email,
       savedUser.password,
       savedUser.referralCode,
@@ -45,6 +47,7 @@ export class PrismaUserRepository implements UserRepository {
     if (!savedUser) return null;
     return new User(
       savedUser.id,
+      savedUser.name,
       savedUser.email,
       savedUser.password,
       savedUser.referralCode,

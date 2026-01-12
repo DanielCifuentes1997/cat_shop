@@ -17,6 +17,7 @@ export class CreateUserUseCase {
 
     const newUser = new User(
       randomUUID(),
+      dto.name,
       dto.email,
       hashedPassword,
       this.generateReferralCode(),

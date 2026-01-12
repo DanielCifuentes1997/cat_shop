@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -6,7 +7,7 @@ import { ApiService } from '../../../services/api.service';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -25,7 +26,12 @@ export class Register {
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        this.errorMessage = 'Error al registrar usuario';
+        const msg = err.error?.message;
+        if (Array.isArray(msg)) {
+          this.errorMessage = msg.join(', ');
+        } else {
+          this.errorMessage = msg || 'Error al registrar usuario';
+        }
         console.error(err);
       }
     });

@@ -24,13 +24,14 @@ export class AuthService {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, name: user.name };
     
     return {
       accessToken: this.jwtService.sign(payload),
       user: {
         id: user.id,
-        email: user.email
+        email: user.email,
+        name: user.name
       }
     };
   }

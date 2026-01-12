@@ -4,7 +4,16 @@
   </a>
   
   <div>
-    <a routerLink="/login" style="color: white; margin-right: 20px; text-decoration: none;">Login</a>
-    <a routerLink="/register" style="background: white; color: #333; padding: 5px 10px; border-radius: 4px; text-decoration: none;">Registro</a>
+    <ng-container *ngIf="!currentUser">
+      <a routerLink="/login" style="color: white; margin-right: 20px; text-decoration: none;">Login</a>
+      <a routerLink="/register" style="background: white; color: #333; padding: 5px 10px; border-radius: 4px; text-decoration: none;">Registro</a>
+    </ng-container>
+
+    <ng-container *ngIf="currentUser">
+      <span style="margin-right: 15px;">Hola, {{ currentUser.name }}</span>
+      <button (click)="logout()" style="background: transparent; color: #ff6b6b; border: 1px solid #ff6b6b; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+        Salir
+      </button>
+    </ng-container>
   </div>
 </nav>
