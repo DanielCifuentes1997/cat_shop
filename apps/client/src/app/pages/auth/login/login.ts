@@ -21,11 +21,9 @@ export class Login {
   onLogin() {
     this.apiService.login(this.email, this.password).subscribe({
       next: () => {
-        // Si el login es correcto, nos vamos al Home
         this.router.navigate(['/']);
       },
       error: (err) => {
-        // Si falla, mostramos mensaje
         this.errorMessage = 'Credenciales incorrectas';
         console.error(err);
       }

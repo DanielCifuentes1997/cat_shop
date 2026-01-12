@@ -1,1 +1,21 @@
-<p>login works!</p>
+<div style="max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+  <h2 style="text-align: center;">Iniciar Sesión</h2>
+  
+  <div style="margin-bottom: 15px;">
+    <label style="display: block; margin-bottom: 5px;">Email:</label>
+    <input type="email" [(ngModel)]="email" style="width: 100%; padding: 8px; box-sizing: border-box;">
+  </div>
+
+  <div style="margin-bottom: 15px;">
+    <label style="display: block; margin-bottom: 5px;">Contraseña:</label>
+    <input type="password" [(ngModel)]="password" style="width: 100%; padding: 8px; box-sizing: border-box;">
+  </div>
+
+  <button (click)="onLogin()" style="width: 100%; padding: 10px; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer;">
+    Entrar
+  </button>
+
+  <p *ngIf="errorMessage" style="color: red; margin-top: 10px; text-align: center;">
+    {{ errorMessage }}
+  </p>
+</div>
