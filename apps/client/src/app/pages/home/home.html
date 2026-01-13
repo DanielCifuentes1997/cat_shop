@@ -6,7 +6,7 @@
   </button>
 </section>
 
-<section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: center;">
+<section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: center; margin-bottom: 40px;">
   <div style="padding: 20px; border: 1px solid #eee; border-radius: 8px;">
     <h3>Materiales Naturales</h3>
     <p>Cartón de alta densidad y madera real.</p>
@@ -19,4 +19,35 @@
     <h3>Envíos a todo el país</h3>
     <p>Tu gato estrena rascador en 24-48 horas.</p>
   </div>
+</section>
+
+<section>
+  <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Catálogo Disponible</h2>
+  
+  @if (products$ | async; as products) {
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+      @for (product of products; track product.id) {
+        <div style="border: 1px solid #eee; border-radius: 12px; overflow: hidden; transition: transform 0.2s;">
+          <img [src]="product.imageUrl" [alt]="product.name" style="width: 100%; height: 250px; object-fit: cover;">
+          <div style="padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+              <h3 style="margin: 0; font-size: 1.25rem;">{{ product.name }}</h3>
+              <span style="background: #e6ffe6; color: #006600; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold;">
+                Stock: {{ product.stock }}
+              </span>
+            </div>
+            <p style="color: #666; line-height: 1.5; margin-bottom: 20px;">{{ product.description }}</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px;">
+              <span style="font-size: 1.5rem; font-weight: bold; color: #333;">$ {{ product.price }}</span>
+              <button style="background: #333; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                Agregar
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <p style="text-align: center; padding: 40px; color: #666;">Cargando productos...</p>
+  }
 </section>

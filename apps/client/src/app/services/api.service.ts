@@ -39,4 +39,8 @@ export class ApiService {
       tap((user: any) => this.currentUserSubject.next(user))
     );
   }
+
+  getProducts() {
+    return this.http.get<any[]>(`${this.apiUrl}/products`);
+  }
 }
