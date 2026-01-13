@@ -1,0 +1,55 @@
+<div style="max-width: 800px; margin: 40px auto; padding: 20px;">
+  <h1 style="margin-bottom: 30px; text-align: center;">Tu Carrito de Compras</h1>
+
+  @if (items().length > 0) {
+    <div style="background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden;">
+      
+      <div style="padding: 20px;">
+        @for (item of items(); track item.id) {
+          <div style="display: flex; align-items: center; border-bottom: 1px solid #eee; padding: 15px 0;">
+            <img [src]="item.imageUrl" [alt]="item.name" style="width: 80px; height: 80px; object-fit: cover; border-radius: 6px; margin-right: 20px;">
+            
+            <div style="flex-grow: 1;">
+              <h3 style="margin: 0 0 10px 0;">{{ item.name }}</h3>
+              
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button (click)="decrease(item.id)" style="width: 30px; height: 30px; border-radius: 4px; border: 1px solid #ddd; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                  -
+                </button>
+                <span style="font-weight: bold; min-width: 20px; text-align: center;">{{ item.quantity }}</span>
+                <button (click)="increase(item)" style="width: 30px; height: 30px; border-radius: 4px; border: 1px solid #ddd; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div style="text-align: right; margin-right: 20px;">
+              <p style="font-weight: bold; font-size: 1.1rem; margin: 0;">$ {{ item.price * item.quantity }}</p>
+              <small style="color: #999;">($ {{ item.price }} c/u)</small>
+            </div>
+
+            <button (click)="remove(item.id)" style="background: none; border: none; color: #ff6b6b; cursor: pointer; font-size: 1.5rem; padding: 5px;">
+              &times;
+            </button>
+          </div>
+        }
+      </div>
+
+      <div style="background: #f9f9f9; padding: 20px; text-align: right;">
+        <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 20px;">
+          Total: $ {{ subtotal() }}
+        </div>
+        
+        <button style="background: #333; color: white; border: none; padding: 12px 30px; font-size: 1rem; border-radius: 6px; cursor: pointer;">
+          Proceder al Pago
+        </button>
+      </div>
+
+    </div>
+  } @else {
+    <div style="text-align: center; padding: 60px;">
+      <p style="font-size: 1.2rem; color: #666;">Tu carrito está vacío.</p>
+      <a routerLink="/" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">Volver a la tienda</a>
+    </div>
+  }
+</div>

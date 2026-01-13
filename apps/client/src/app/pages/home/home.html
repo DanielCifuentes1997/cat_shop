@@ -39,7 +39,7 @@
             <p style="color: #666; line-height: 1.5; margin-bottom: 20px;">{{ product.description }}</p>
             <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px;">
               <span style="font-size: 1.5rem; font-weight: bold; color: #333;">$ {{ product.price }}</span>
-              <button style="background: #333; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">
+              <button (click)="addToCart(product)" style="background: #333; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">
                 Agregar
               </button>
             </div>
@@ -51,3 +51,7 @@
     <p style="text-align: center; padding: 40px; color: #666;">Cargando productos...</p>
   }
 </section>
+
+<div class="toast" [class.show]="showToast">
+  Agregado al carrito correctamente
+</div>

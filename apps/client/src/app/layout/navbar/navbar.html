@@ -1,9 +1,18 @@
 <nav style="background: #333; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
   <a routerLink="/" style="color: white; text-decoration: none; font-weight: bold; font-size: 1.2rem;">
-     Noah || Rascadores Para Gatos
+      Noah || Rascadores Para Gatos
   </a>
   
-  <div>
+  <div style="display: flex; align-items: center;">
+    <a routerLink="/cart" style="color: white; margin-right: 20px; text-decoration: none; display: flex; align-items: center; cursor: pointer;">
+      Carrito
+      @if (cartCount() > 0) {
+        <span style="background: #ff6b6b; color: white; font-size: 0.8rem; padding: 2px 6px; border-radius: 10px; margin-left: 5px;">
+          {{ cartCount() }}
+        </span>
+      }
+    </a>
+
     <ng-container *ngIf="!currentUser">
       <a routerLink="/login" style="color: white; margin-right: 20px; text-decoration: none;">Login</a>
       <a routerLink="/register" style="background: white; color: #333; padding: 5px 10px; border-radius: 4px; text-decoration: none;">Registro</a>
