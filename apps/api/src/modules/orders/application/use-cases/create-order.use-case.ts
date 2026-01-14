@@ -1,12 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
-import { CreateOrderDto } from './dto/create-order.dto';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { CreateOrderDto } from '../dtos/create-order.dto';
+import { Order } from '../../domain/entities/order.entity';
+import { OrderRepository } from '../../domain/interfaces/order.repository';
+import { PrismaService } from '../../../../prisma/prisma.service';
 
 @Injectable()
-export class OrdersService {
-  constructor(private prisma: PrismaService) {}
+export class CreateOrderUseCase {
+  constructor(
+    @Inject('OrderRepository') private readonly orderRepository: OrderRepository,
+    private readonly prisma: PrismaService
+  ) {}
 
-  async create(data: CreateOrderDto, userId?: string) {
+  async execute(data: CreateOrderDto, userId?: string | null) {
     const { items, shippingDetails } = data;
 
     const productIds = items.map((item) => item.productId);
@@ -20,7 +25,8 @@ export class OrdersService {
 
     let totalProductPrice = 0;
     let totalQuantity = 0;
-    const orderItemsData: any[] = [];
+
+    const orderItemsData: { productId: string; quantity: number; price: number }[] = [];
 
     for (const item of items) {
       const product = products.find((p) => p.id === item.productId);
@@ -33,7 +39,7 @@ export class OrdersService {
       orderItemsData.push({
         productId: product.id,
         quantity: item.quantity,
-        price: product.price,
+        price: Number(product.price),
       });
     }
 
@@ -54,29 +60,18 @@ export class OrdersService {
 
     const totalAmount = totalProductPrice + shippingCost;
 
-    const order = await this.prisma.order.create({
-      data: {
-        userId: userId || null,
-        totalAmount,
-        shippingCost,
-        department: shippingDetails.department,
-        city: shippingDetails.city,
-        address: shippingDetails.address,
-        phone: shippingDetails.phone,
-        status: 'PENDING',
-        items: {
-          create: orderItemsData,
-        },
-      },
-      include: {
-        items: {
-          include: {
-            product: true,
-          },
-        },
-      },
+    const newOrder = new Order({
+      userId: userId || null,
+      status: 'PENDING',
+      totalAmount,
+      shippingCost,
+      department: shippingDetails.department,
+      city: shippingDetails.city,
+      address: shippingDetails.address,
+      phone: shippingDetails.phone,
+      items: orderItemsData
     });
 
-    return order;
+    return this.orderRepository.create(newOrder);
   }
 }

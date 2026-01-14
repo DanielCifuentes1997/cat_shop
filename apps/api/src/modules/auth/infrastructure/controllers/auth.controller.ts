@@ -1,23 +1,23 @@
 import { Body, Controller, Get, Post, HttpCode, HttpStatus, Res, UseGuards, Req } from '@nestjs/common';
 import type { Response, Request } from 'express';
-import { AuthService } from '../services/auth.service';
-import { LoginDto } from '../dto/login.dto';
+import { LoginUseCase } from '../../application/use-cases/login.use-case';
+import { LoginDto } from '../../application/dtos/login.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly loginUseCase: LoginUseCase) {}
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: LoginDto, @Res() response: Response) {
-    const { accessToken, user } = await this.authService.login(loginDto);
+    const { accessToken, user } = await this.loginUseCase.execute(loginDto);
 
     response.cookie('Authentication', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 3600000, 
+      maxAge: 3600000,
     });
 
     return response.send(user);
