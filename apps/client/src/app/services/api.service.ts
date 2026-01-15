@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, switchMap, tap } from 'rxjs';
 import { User } from '../interfaces/user.interface';
 import { Product } from '../interfaces/product.interface';
+import { Order } from '../interfaces/order.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -46,8 +47,42 @@ export class ApiService {
     return this.http.get<Product[]>(`${this.apiUrl}/products`);
   }
 
+  getProductById(id: string) {
+    return this.http.get<Product>(`${this.apiUrl}/products/${id}`);
+  }
+
+  createProduct(product: any) {
+    return this.http.post<Product>(`${this.apiUrl}/products`, product, {
+      withCredentials: true
+    });
+  }
+
+  updateProduct(id: string, product: any) {
+    return this.http.patch<Product>(`${this.apiUrl}/products/${id}`, product, {
+      withCredentials: true
+    });
+  }
+
+  deleteProduct(id: string) {
+    return this.http.delete(`${this.apiUrl}/products/${id}`, {
+      withCredentials: true
+    });
+  }
+
   createOrder(orderData: any) {
     return this.http.post(`${this.apiUrl}/orders`, orderData, {
+      withCredentials: true
+    });
+  }
+
+  getOrders() {
+    return this.http.get<Order[]>(`${this.apiUrl}/orders`, {
+      withCredentials: true
+    });
+  }
+
+  updateOrderStatus(id: string, status: string) {
+    return this.http.patch(`${this.apiUrl}/orders/${id}/status`, { status }, {
       withCredentials: true
     });
   }
