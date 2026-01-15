@@ -3,6 +3,7 @@ import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { CartService } from '../../services/cart.service';
+import { User } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-navbar',
@@ -16,7 +17,7 @@ export class Navbar implements OnInit {
   private router = inject(Router);
   private cartService = inject(CartService);
 
-  currentUser: any = null;
+  currentUser: User | null = null;
   cartCount = this.cartService.count;
 
   ngOnInit() {

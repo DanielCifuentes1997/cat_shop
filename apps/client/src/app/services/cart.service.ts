@@ -1,18 +1,12 @@
-import { Injectable, computed, signal } from '@angular/core';
-
-export interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  imageUrl: string;
-  quantity: number;
-}
+import { Injectable, computed, signal, effect } from '@angular/core';
+import { CartItem } from '../interfaces/cart-item.interface';
+import { BaseProduct } from '../interfaces/base-product.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private cartItems = signal<CartItem[]>([]);
+  private cartItems = signal<CartItem[]>(this.loadCartFromStorage());
 
   count = computed(() => this.cartItems().reduce((acc, item) => acc + item.quantity, 0));
 
@@ -20,7 +14,18 @@ export class CartService {
 
   items = this.cartItems.asReadonly();
 
-  addToCart(product: any) {
+  constructor() {
+    effect(() => {
+      localStorage.setItem('cart', JSON.stringify(this.cartItems()));
+    });
+  }
+
+  private loadCartFromStorage(): CartItem[] {
+    const stored = localStorage.getItem('cart');
+    return stored ? JSON.parse(stored) : [];
+  }
+
+  addToCart(product: BaseProduct) {
     this.cartItems.update(items => {
       const existingItem = items.find(item => item.id === product.id);
 

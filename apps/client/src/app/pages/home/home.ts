@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { CartService } from '../../services/cart.service';
+import { Product } from '../../interfaces/product.interface';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,7 @@ export class Home {
   products$ = this.apiService.getProducts();
   showToast = false;
 
-  addToCart(product: any) {
+  addToCart(product: Product) {
     this.cartService.addToCart(product);
     this.showToast = true;
     setTimeout(() => {

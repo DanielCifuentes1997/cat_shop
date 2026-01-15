@@ -2,8 +2,8 @@ import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { CartService } from '../../services/cart.service';
+import { ApiService } from '../../services/api.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -16,7 +16,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class Checkout {
   private fb = inject(FormBuilder);
   private cartService = inject(CartService);
-  private http = inject(HttpClient);
+  private apiService = inject(ApiService);
   private router = inject(Router);
 
   items = this.cartService.items;
@@ -54,7 +54,7 @@ export class Checkout {
       shippingDetails: this.checkoutForm.value
     };
 
-    this.http.post('/api/orders', orderData).subscribe({
+    this.apiService.createOrder(orderData).subscribe({
       next: () => {
         this.cartService.clearCart();
         alert('Pedido realizado con éxito');

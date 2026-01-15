@@ -1,15 +1,28 @@
 import { Routes } from '@angular/router';
-import { Home } from './pages/home/home';
-import { Login } from './pages/auth/login/login';
-import { Register } from './pages/auth/register/register';
-import { Cart } from './pages/cart/cart';
-import { Checkout } from './pages/checkout/checkout';
 
 export const routes: Routes = [
-  { path: '', component: Home },
-  { path: 'login', component: Login },
-  { path: 'register', component: Register },
-  { path: 'cart', component: Cart },
-  { path: 'checkout', component: Checkout },
-  { path: '**', redirectTo: '' }
+  { 
+    path: '', 
+    loadComponent: () => import('./pages/home/home').then(m => m.Home) 
+  },
+  { 
+    path: 'login', 
+    loadComponent: () => import('./pages/auth/login/login').then(m => m.Login) 
+  },
+  { 
+    path: 'register', 
+    loadComponent: () => import('./pages/auth/register/register').then(m => m.Register) 
+  },
+  { 
+    path: 'cart', 
+    loadComponent: () => import('./pages/cart/cart').then(m => m.Cart) 
+  },
+  { 
+    path: 'checkout', 
+    loadComponent: () => import('./pages/checkout/checkout').then(m => m.Checkout) 
+  },
+  { 
+    path: '**', 
+    redirectTo: '' 
+  }
 ];

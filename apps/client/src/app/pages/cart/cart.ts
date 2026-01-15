@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../services/cart.service';
+import { Product } from '../../interfaces/product.interface';
 
 @Component({
   selector: 'app-cart',
@@ -16,8 +17,8 @@ export class Cart {
   items = this.cartService.items;
   subtotal = this.cartService.subtotal;
 
-  increase(item: any) {
-    this.cartService.addToCart(item);
+  increase(item: any) { 
+    this.cartService.addToCart(item as Product);
   }
 
   decrease(id: string) {
